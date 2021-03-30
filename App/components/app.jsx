@@ -9,9 +9,17 @@ class App extends React.Component {
     super();
     this.state = {
       currentMovie: null,
+      searchList: [],
       movies: []
     }
   }
+
+  updateSearch(searchList) {
+    this.setState({
+      searchList: searchList
+    })
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -19,7 +27,7 @@ class App extends React.Component {
       <div>
         <Box elevation={2}>
           <Grid container>
-            <Search />
+            <Search searchList={this.state.searchList} updateSearch={this.updateSearch.bind(this)}/>
             <Grid item xs={1}></Grid>
             <MovieList movies={this.state.movies}/>
             <MovieInfo />

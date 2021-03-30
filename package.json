@@ -21,6 +21,8 @@
   "homepage": "https://github.com/bmh0013/Movie-Watch-List#readme",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@types/react": "^17.0.3",
     "axios": "^0.21.1",
     "express": "^4.17.1",
     "react": "^17.0.2",

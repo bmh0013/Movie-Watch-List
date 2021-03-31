@@ -15,11 +15,20 @@ class App extends React.Component {
   }
 
   updateSearch(searchList) {
-    this.setState({
-      searchList: searchList
-    })
+    this.setState( { searchList } );
   }
 
+  setCurrentMovie(movie) {
+    this.setState({
+      currentMovie: movie
+    });
+  }
+
+  addMovie() {
+    this.setState({
+      movies: [...this.state.movies, this.state.currentMovie]
+    });
+  }
 
   render() {
     const { classes } = this.props;
@@ -27,10 +36,16 @@ class App extends React.Component {
       <div>
         <Box elevation={2}>
           <Grid container>
-            <Search searchList={this.state.searchList} updateSearch={this.updateSearch.bind(this)}/>
+            <Search
+              searchList={this.state.searchList}
+              updateSearch={this.updateSearch.bind(this)}
+              setCurrentMovie={this.setCurrentMovie.bind(this)}
+            />
             <Grid item xs={1}></Grid>
-            <MovieList movies={this.state.movies}/>
-            <MovieInfo />
+            <MovieList movies={this.state.movies} />
+            {this.state.currentMovie &&
+              <MovieInfo currentMovie={this.state.currentMovie} addMovie={this.addMovie.bind(this)} />
+            }
             <Grid item xs={1}></Grid>
           </Grid>
         </Box>

@@ -8,21 +8,37 @@ const useStyles = makeStyles((theme) => ({
   searchContainer: {
     textAlign: 'center',
     marginTop: '7%',
-    marginBottom: '3%'
+    marginBottom: '3%',
   },
   searchBar: {
-    width: "50%"
+    width: "50%",
+    backgroundColor: 'white'
   },
-  searchResults: {
+  searchResultsContainer: {
     border: '1px solid rebeccapurple',
+    fontFamily: 'Roboto',
     textAlign: 'center',
-    marginBottom: '4%'
+    marginBottom: '4%',
+  },
+  searchResult: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+    textShadow: '1px 1px black',
+    "&:hover": {
+      backgroundColor: 'rgb(7, 177, 77, 0.42)',
+      cursor: 'pointer'
+    }
   }
 }));
 
-var Search = ({ searchList, updateSearch }) => {
+
+var Search = ({ searchList, updateSearch, setCurrentMovie }) => {
   const classes = useStyles();
-  console.log('search:', searchList);
+
+  function showInfo(e) {
+    setCurrentMovie(searchList[e.currentTarget.getAttribute('index')]);
+  }
 
   function searchMovie(e) {
     const options = {
@@ -47,15 +63,6 @@ var Search = ({ searchList, updateSearch }) => {
       });
   }
 
-
-  // const searchResults = (
-  //   <div className="thumbnail-container">
-  //     {searchList.map((movie, index) =>
-  //       <Grid item>{movie.original_title}</Grid>
-  //     )}
-  //   </div>
-  // );
-
   return (
     <Grid item container>
 
@@ -71,11 +78,25 @@ var Search = ({ searchList, updateSearch }) => {
 
       <Grid item xs={3}></Grid>
 
-      <Grid item container className={classes.searchResults} xs={6}>
+      <Grid item container className={classes.searchResultsContainer} xs={6}>
         {searchList.map((movie, index) => {
-          let photoURL = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+          let photoURL = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+          let year;
+          if (movie.release_date) {
+            year = movie.release_date.split('-')[0];
+          } else {
+            year = 'N/A'
+          }
           return (
-            <Grid item container xs={12} key={movie.id} index={index} style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Grid
+              item
+              container
+              xs={12}
+              key={movie.id}
+              index={index}
+              className={classes.searchResult}
+              onClick={showInfo}
+            >
               <Grid item xs={2}>
                 <img src={photoURL} height='50px'/>
               </Grid>
@@ -83,7 +104,7 @@ var Search = ({ searchList, updateSearch }) => {
                 {movie.original_title}
               </Grid>
               <Grid item xs={2}>
-                {movie.release_date}
+                ( {year} )
               </Grid>
             </Grid>
           )

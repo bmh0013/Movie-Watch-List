@@ -5,19 +5,20 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   movieListContainer: {
     textAlign: "center",
-    border: '1px solid red'
+    border: '1px solid red',
+    backgroundColor: 'white'
   },
   movieList: {
     height: '100px'
   }
 }));
 
-var MovieList = (props) => {
+var MovieList = ( { movies } ) => {
   const classes = useStyles();
 
   return (
     <Grid item container xs={5} className={classes.movieListContainer}>
-      {props.movies.map(movie => <Grid item>Movie</Grid>)}
+      {movies.map(movie => <Grid item key={movie.id}>{movie.original_title}</Grid>)}
     </Grid>
   );
 }

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-var Search = ({ searchList, updateSearch, setCurrentMovie }) => {
+var Search = ({ searchList, setSearchList, setCurrentMovie }) => {
   const classes = useStyles();
 
   function showInfo(e) {
@@ -55,8 +55,7 @@ var Search = ({ searchList, updateSearch, setCurrentMovie }) => {
 
     axios.request(options)
       .then(function (response) {
-        updateSearch( response.data.results.slice(0, 5) )
-        console.log(response.data)
+        setSearchList( response.data.results.slice(0, 5) )
       })
       .catch(function (error) {
         console.error(error);

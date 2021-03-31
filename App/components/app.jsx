@@ -1,72 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import useLocalStorageState from 'use-local-storage-state';
 import Search from "./search.jsx"
 import MovieList from "./movieList.jsx"
 import MovieInfo from "./movieInfo.jsx"
 import { Grid, Box } from '@material-ui/core'
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      currentMovie: null,
-      searchList: [],
-      movies: {}
-    }
-  }
+var App = () => {
+  const [movies, setMovies, isPersistent] = useLocalStorageState('movies', {});
+  const [currentMovie, setCurrentMovie] = useState(null);
+  const [searchList, setSearchList] = useState([]);
 
-  updateSearch(searchList) {
-    this.setState({
-      searchList: searchList
-    });
-  }
-
-  setCurrentMovie(movie) {
-    this.setState({
-      currentMovie: movie
-    });
-  }
-
-  updateMovies(action) {
+  function updateMovies(action) {
     if (action === 'Add Movie +') {
-      this.setState({
-        movies: {...this.state.movies, [this.state.currentMovie.id]: this.state.currentMovie}
-      });
+      setMovies({...movies, [currentMovie.id]: currentMovie});
     } else {
-      let movieState = {...this.state.movies};
-      delete movieState[this.state.currentMovie.id];
-      this.setState({
-        movies: movieState
-      });
+      let movieState = {...movies};
+      delete movieState[currentMovie.id];
+      setMovies({...movieState});
     }
   }
 
-  render() {
-    const { classes } = this.props;
-    console.log('state:', this.state.movies)
-    return (
-      <div>
-        <Box elevation={2}>
-          <Grid container>
-            <Search
-              searchList={this.state.searchList}
-              updateSearch={this.updateSearch.bind(this)}
-              setCurrentMovie={this.setCurrentMovie.bind(this)}
+  return (
+    <div>
+      <Box elevation={2}>
+        <Grid container>
+          <Search
+            searchList={searchList}
+            setSearchList={setSearchList}
+            setCurrentMovie={setCurrentMovie}
+          />
+          <Grid item xs={1}></Grid>
+          <MovieList movies={Object.values(movies)} />
+          {currentMovie &&
+            <MovieInfo
+              currentMovie={currentMovie}
+              updateMovies={updateMovies}
+              movies={movies}
             />
-            <Grid item xs={1}></Grid>
-            <MovieList movies={Object.values(this.state.movies)} />
-            {this.state.currentMovie &&
-              <MovieInfo
-                currentMovie={this.state.currentMovie}
-                updateMovies={this.updateMovies.bind(this)}
-                movies={this.state.movies}
-              />
-            }
-            <Grid item xs={1}></Grid>
-          </Grid>
-        </Box>
-      </div>
-    );
-  }
+          }
+          <Grid item xs={1}></Grid>
+        </Grid>
+      </Box>
+    </div>
+  );
 }
 
 export default App;

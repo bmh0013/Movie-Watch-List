@@ -67,7 +67,7 @@ const genreList = {
 var MovieInfo = ({ currentMovie, updateMovies, movies }) => {
   const classes = useStyles();
   let [updateMovieBtn, setUpdateMovieBtn] = useState('Add Movie +');
-  let backdrop = `https://image.tmdb.org/t/p/w500${currentMovie.backdrop_path}`;
+  let backdrop = `https://image.tmdb.org/t/p/original${currentMovie.backdrop_path}`;
   let photoURL = `https://image.tmdb.org/t/p/w500${currentMovie.poster_path}`;
   let date = moment(currentMovie.release_date, 'YYYY-MM-DD').format('MMMM D, YYYY');
   let genres = '';
@@ -93,7 +93,6 @@ var MovieInfo = ({ currentMovie, updateMovies, movies }) => {
   }, [currentMovie])
 
   function handleClick(e) {
-    console.log(e.target.innerHTML)
     if (e.target.innerHTML === 'Add Movie +') {
       setUpdateMovieBtn('Remove Movie -')
     } else {

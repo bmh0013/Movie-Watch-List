@@ -18,7 +18,11 @@ var MovieList = ( { movies } ) => {
 
   return (
     <Grid item container xs={5} className={classes.movieListContainer}>
-      {movies.map(movie => <Grid item key={movie.id}>{movie.original_title}</Grid>)}
+      {movies.map(movie => {
+        return (
+          <Grid item key={movie.id}>{movie.original_title}</Grid>
+        )
+      })}
     </Grid>
   );
 }

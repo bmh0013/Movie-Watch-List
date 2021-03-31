@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import $ from 'jquery';
 import { TextField, Grid, Button} from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
@@ -62,9 +62,9 @@ const genreList = {
   10752: "War"
 }
 
-var MovieInfo = ({ currentMovie, addMovie }) => {
-  console.log(currentMovie);
+var MovieInfo = ({ currentMovie, updateMovies, movies }) => {
   const classes = useStyles();
+  let [updateMovieBtn, setUpdateMovieBtn] = useState('Add Movie +');
   let backdrop = `https://image.tmdb.org/t/p/w500${currentMovie.backdrop_path}`;
   let photoURL = `https://image.tmdb.org/t/p/w500${currentMovie.poster_path}`;
   let date = moment(currentMovie.release_date, 'YYYY-MM-DD').format('MMMM D, YYYY');
@@ -78,10 +78,27 @@ var MovieInfo = ({ currentMovie, addMovie }) => {
   }
 
   useEffect(() => {
-    $('body').css('background-image', `url(${backdrop})`);
-    $('body').css('background-repeat', 'no-repeat')
-    $('body').css('background-size', 'cover')
+    $('body').css({
+      'background-image': `url(${backdrop})`,
+      'background-repeat': 'no-repeat',
+      'background-size': 'cover',
+    })
+    if (movies[currentMovie.id]) {
+      setUpdateMovieBtn('Remove Movie -')
+    } else {
+      setUpdateMovieBtn('Add Movie +')
+    }
   }, [currentMovie])
+
+  function handleClick(e) {
+    console.log(e.target.innerHTML)
+    if (e.target.innerHTML === 'Add Movie +') {
+      setUpdateMovieBtn('Remove Movie -')
+    } else {
+      setUpdateMovieBtn('Add Movie +')
+    }
+    updateMovies(e.target.innerHTML);
+  }
 
   return (
     <Grid item container xs={5} className={classes.movieInfoContainer}>
@@ -119,7 +136,7 @@ var MovieInfo = ({ currentMovie, addMovie }) => {
       </Grid>
 
       <Grid item xs={12} className={classes.button} >
-          <Button color='secondary' variant='outlined' onClick={addMovie}>Add Movie +</Button>
+          <Button color='secondary' variant='outlined' onClick={handleClick}>{updateMovieBtn}</Button>
       </Grid>
 
     </Grid>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Search from "./search.jsx"
 import MovieList from "./movieList.jsx"
 import MovieInfo from "./movieInfo.jsx"
@@ -10,12 +10,14 @@ class App extends React.Component {
     this.state = {
       currentMovie: null,
       searchList: [],
-      movies: []
+      movies: {}
     }
   }
 
   updateSearch(searchList) {
-    this.setState( { searchList } );
+    this.setState({
+      searchList: searchList
+    });
   }
 
   setCurrentMovie(movie) {
@@ -24,14 +26,23 @@ class App extends React.Component {
     });
   }
 
-  addMovie() {
-    this.setState({
-      movies: [...this.state.movies, this.state.currentMovie]
-    });
+  updateMovies(action) {
+    if (action === 'Add Movie +') {
+      this.setState({
+        movies: {...this.state.movies, [this.state.currentMovie.id]: this.state.currentMovie}
+      });
+    } else {
+      let movieState = {...this.state.movies};
+      delete movieState[this.state.currentMovie.id];
+      this.setState({
+        movies: movieState
+      });
+    }
   }
 
   render() {
     const { classes } = this.props;
+    console.log('state:', this.state.movies)
     return (
       <div>
         <Box elevation={2}>
@@ -42,9 +53,13 @@ class App extends React.Component {
               setCurrentMovie={this.setCurrentMovie.bind(this)}
             />
             <Grid item xs={1}></Grid>
-            <MovieList movies={this.state.movies} />
+            <MovieList movies={Object.values(this.state.movies)} />
             {this.state.currentMovie &&
-              <MovieInfo currentMovie={this.state.currentMovie} addMovie={this.addMovie.bind(this)} />
+              <MovieInfo
+                currentMovie={this.state.currentMovie}
+                updateMovies={this.updateMovies.bind(this)}
+                movies={this.state.movies}
+              />
             }
             <Grid item xs={1}></Grid>
           </Grid>

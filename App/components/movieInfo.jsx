@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     textShadow: '1px 1px black',
     padding: '10px',
+    height: '500px',
+    maxHeight: '500px',
   },
   movieTitle: {
     fontFamily: 'Roboto',

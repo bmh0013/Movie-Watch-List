@@ -32,7 +32,7 @@ const MovieInfo = ({ currentMovie, setMovies, movies }) => {
   }, [currentMovie])
 
   function handleClick(e) {
-    if (e.target.value === 'Add Movie +') {
+    if (e.target.innerHTML === 'Add Movie +') {
       setUpdateMovieBtn('Remove Movie -')
       setMovies({...movies, [currentMovie.id]: currentMovie});
     } else {
@@ -63,7 +63,8 @@ const MovieInfo = ({ currentMovie, setMovies, movies }) => {
           </div>
 
           <div className="updateMovieBtn">
-            <input type='button' onClick={handleClick} value={updateMovieBtn} />
+            {/* <input type='button' onClick={handleClick} value={updateMovieBtn} /> */}
+            <button className="addMovie" onClick={handleClick}>{updateMovieBtn}</button>
           </div>
         </div>
 

@@ -3,44 +3,19 @@ import useLocalStorageState from 'use-local-storage-state';
 import Search from "./search.jsx"
 import MovieList from "./movieList.jsx"
 import MovieInfo from "./movieInfo.jsx"
-import { Grid, Box } from '@material-ui/core'
 
 var App = () => {
   const [movies, setMovies, isPersistent] = useLocalStorageState('movies', {});
   const [currentMovie, setCurrentMovie] = useState(null);
-  const [searchList, setSearchList] = useState([]);
-
-  function updateMovies(action) {
-    if (action === 'Add Movie +') {
-      setMovies({...movies, [currentMovie.id]: currentMovie});
-    } else {
-      let movieState = {...movies};
-      delete movieState[currentMovie.id];
-      setMovies({...movieState});
-    }
-  }
+  const [searchResults, setSearchResults] = useState([]);
 
   return (
-    <div>
-      <Box elevation={2}>
-        <Grid container>
-          <Search
-            searchList={searchList}
-            setSearchList={setSearchList}
-            setCurrentMovie={setCurrentMovie}
-          />
-          <Grid item xs={1}></Grid>
-          <MovieList movies={Object.values(movies)} />
-          {currentMovie &&
-            <MovieInfo
-              currentMovie={currentMovie}
-              updateMovies={updateMovies}
-              movies={movies}
-            />
-          }
-          <Grid item xs={1}></Grid>
-        </Grid>
-      </Box>
+    <div className='app container'>
+      <Search searchResults={searchResults} setSearchResults={setSearchResults} setCurrentMovie={setCurrentMovie} />
+      <div className="lowerHalf">
+        {!!Object.values(movies).length && <MovieList movies={movies} setCurrentMovie={setCurrentMovie} />}
+        {currentMovie && <MovieInfo currentMovie={currentMovie} setMovies={setMovies} movies={movies} />}
+      </div>
     </div>
   );
 }
